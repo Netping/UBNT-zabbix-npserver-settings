@@ -7,26 +7,11 @@ require_once './include/forms.inc.php';
 require_once './include/users.inc.php';
 
 $page['title'] = _('NetPing Server Settings');
-// $page['file'] = 'maintenance_oneclic.php';
-// $page['scripts'] = ['class.calendar.js'];
-// $page['type'] = detect_page_type();
-
-// For debug needs only
-function console($data) {
-	# print_r($data);
-	if(gettype($data) == 'object' || gettype($data) == 'array') {
-		$o = date('Y-m-d H:i:s') . ' ' . print_r($data, true);
-	} else {
-		$o = date('Y-m-d H:i:s') . ' ' . $data;
-	}
-	file_put_contents('/usr/share/zabbix/modules/log.txt', $o . PHP_EOL, FILE_APPEND);
-}
 
 require_once './include/page_header.php';
 $this->includeJsFile('validator/nearley.js.php');
 $this->includeJsFile('validator/ipv4.js.php');
 $this->includeJsFile('validator/ip_single.js.php');
-$this->includeJsFile('validator/ip_list.js.php');
 $this->includeJsFile('helper.js.php');
 $this->includeJsFile('styles.js.php');
 
@@ -114,11 +99,6 @@ if (sizeof($_POST) == 0) {
 			$messages[] = $n;
 		}
 	}
-	/*
-	echo "<pre>";
-	print_r($nmcli_out);
-	echo "</pre>";
-	*/
 
 	if(array_key_exists('ipv4.method', $net)) {
 		$dhcp_mode = $net['ipv4.method'];
@@ -136,8 +116,6 @@ if (sizeof($_POST) == 0) {
 		$dns1 = (isset($dns_arr[0]) && $dns_arr[0] != "--") ? $dns_arr[0] : "";
 		$dns2 = (isset($dns_arr[1])) ? $dns_arr[1] : "";
 	}
-
-
 }
 
 ?>
