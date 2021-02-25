@@ -17,7 +17,7 @@ $this->includeJsFile('styles.js.php');
 
 
 $connectionName = "enp0s3"; // you must change this value according to your server setting
-$scriptFolder = '/usr/share/zabbix/modules/NpServerSettings/bash';
+$scriptFolder = '/usr/share/zabbix/modules/DKST90_NpServerSettings/bash';
 
 $nmcli_out = [];
 $net = [];
