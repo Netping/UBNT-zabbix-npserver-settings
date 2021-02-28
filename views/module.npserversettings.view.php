@@ -1,11 +1,5 @@
 <?php
 
-require_once './include/config.inc.php';
-require_once './include/hosts.inc.php';
-require_once './include/maintenances.inc.php';
-require_once './include/forms.inc.php';
-require_once './include/users.inc.php';
-
 $page['title'] = _('NetPing Server Settings');
 
 require_once './include/page_header.php';
