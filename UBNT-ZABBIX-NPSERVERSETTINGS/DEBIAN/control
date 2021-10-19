@@ -1,5 +1,5 @@
-Package: ubnt-zabbix-npser-set
-Version: 0.1
+Package: ubnt-zabbix-npserver-settings
+Version: 1.1
 Maintainer: vv.lisyak@gmail.com
 Architecture: all
 Section: misc
