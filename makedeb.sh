@@ -1,10 +1,12 @@
 #!/bin/bash
 #need set version in next 3-th line
-version=1.1
+major=0
+minor=0
+path=1
 apt-get install dpkg debconf debhelper lintian
 cat <<EOF > ./UBNT-ZABBIX-NPSERVERSETTINGS/DEBIAN/control
 Package: ubnt-zabbix-npser-set
-Version: $version
+Version: $major.$minor-$path
 Maintainer: vv.lisyak@gmail.com
 Architecture: all
 Section: misc
@@ -13,5 +15,5 @@ Description: NetPing
  Try nomber one.
 EOF
 fakeroot dpkg-deb --build UBNT*
-mv ./UBNT-ZABBIX-NPSERVERSETTINGS.deb ubnt-zabbix-npserversetings_$version.deb
+mv ./UBNT-ZABBIX-NPSERVERSETTINGS.deb UBNT-ZABBIX-NPSERVERSETTINGS_$major.$minor-$path.deb
 exit 0
