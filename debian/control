@@ -1,0 +1,7 @@
+Package: UBNT-zabbix-npserver-settings
+Version: 0.0-1
+Maintainer: _valerius@mail.ru
+Architecture: all
+Section: misc
+Description: NetPing
+ UBNT-zabbix-npserver-settings.
