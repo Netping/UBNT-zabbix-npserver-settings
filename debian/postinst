@@ -2,4 +2,8 @@
 
 awk -F":" '{if ($1=="www-data") system("chown -R " $3":"$4 " /usr/share/zabbix/modules/NpServerSettings") }' /etc/passwd
 
+chown root:www-data /usr/share/zabbix/modules/NpServerSettings/bash/np_server_settings.sh
+chmod ugo+x /usr/share/zabbix/modules/NpServerSettings/bash/np_server_settings.sh
+chmod u+s /usr/share/zabbix/modules/NpServerSettings/bash/np_server_settings.sh
+
 exit 0

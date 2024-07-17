@@ -23,7 +23,8 @@ class NpServerSettingsView extends CAction {
 		 * modification, such as update or delete actions. In such case Session ID must be presented in the URL, so that
 		 * the URL would expire as soon as the session expired.
 		 */
-		$this->disableSIDvalidation();
+		//$this->disableSIDvalidation();
+		$this->disableCsrfValidation();
 	}
  
 	/**

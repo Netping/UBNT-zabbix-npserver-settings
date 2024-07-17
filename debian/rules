@@ -11,4 +11,4 @@ DESTDIR=debian/ubnt-zabbix-npserver-settings
 
 override_dh_auto_install:
 	mkdir -p $(DESTDIR)
-	cp -r tmp/ $(DESTDIR)
+	cp -r usr/ $(DESTDIR)/usr/

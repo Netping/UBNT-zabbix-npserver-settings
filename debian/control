@@ -1,7 +1,12 @@
-Package: UBNT-zabbix-npserver-settings
-Version: 0.0-1
-Maintainer: _valerius@mail.ru
-Architecture: all
+Source: ubnt-zabbix-npserver-settings
 Section: misc
+Priority: optional
+Maintainer: _valerius@mail.ru
+Version: 2.1-1
+
+Package: ubnt-zabbix-npserver-settings
+Architecture: all
+Depends: network-manager
+Build-Depends: debhelper-compat
 Description: NetPing
  UBNT-zabbix-npserver-settings.

@@ -10,8 +10,11 @@ $this->includeJsFile('helper.js.php');
 $this->includeJsFile('styles.js.php');
 
 
-$connectionName = "enp0s3"; // you must change this value according to your server setting
-$scriptFolder = '/usr/share/zabbix/modules/DKST90_NpServerSettings/bash';
+exec("/etc/dksl-90-vars lan", $nmcli_out, $resCodeOnGet);
+$connectionName = $nmcli_out[0];
+//$connectionName = "enp0s3"; // you must change this value according to your server setting
+
+$scriptFolder = '/usr/share/zabbix/modules/NpServerSettings/bash';
 
 $nmcli_out = [];
 $net = [];

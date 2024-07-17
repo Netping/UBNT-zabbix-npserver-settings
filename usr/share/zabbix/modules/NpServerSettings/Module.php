@@ -6,9 +6,9 @@ use APP;
 use CController as CAction;
  
 /**
- * Please see Core\CModule class for additional reference.
+ * Please see \Zabbix\Core\CModule class for additional reference.
  */
-class Module extends \Core\CModule {
+class Module extends \Zabbix\Core\CModule {
  
 	/**
 	 * Initialize module.
@@ -16,9 +16,9 @@ class Module extends \Core\CModule {
 	public function init(): void {
 		// Initialize main menu (CMenu class instance).
 		APP::Component()->get('menu.main')
-			->findOrAdd(_('Configuration'))
+			->findOrAdd(_('Administration'))
 				->getSubmenu()
-					->insertAfter(_('Maintenance'),((new \CMenuItem(_('NetPing Server Settings')))
+					->insertAfter(_('General'),((new \CMenuItem(_('NetPing Server Settings')))
 						->setAction('npserversettings.view'))
 					);
 	}

@@ -1,5 +1,0 @@
-#!/bin/bash
-
-awk -F":" '{if ($1=="www-data") system("chown -R " $3":"$4 " /usr/share/zabbix/modules/NpServerSettings") }' /etc/passwd
-
-exit 0
