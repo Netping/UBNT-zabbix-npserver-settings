@@ -1,5 +1,5 @@
-ubnt-zabbix-npserver-settings (2.1-1) unstable; urgency=low
+ubnt-zabbix-npserver-settings (2.2-1) unstable; urgency=medium
 
-  * Bla bla sux.
+  * Fixed a bug that caused the module to not work.
 
- -- Valery V. Sedletski <_valerius@mail.ru>  Tue, 26 Feb 2024 06:19:00 -0300
+ -- Netping DKSL team <_soft@netping.tw>  Fri, 04 Jul 2025 13:08:00 -0300

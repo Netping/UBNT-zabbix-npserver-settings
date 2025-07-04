@@ -6,7 +6,7 @@
 
 ### GET Server Settings
 # ---------------------
-# np_server_settings.sh --device="enp0s3" --command=get 
+# np_server_settings.sh --device="enp2s0" --command=get 
 # -----------------------------------------------------
 # ipv4.method:                            manual
 # ipv4.dns:                               8.8.8.8
@@ -15,15 +15,15 @@
 
 ### SET Server Settings
 # ---------------------
-# np_server_settings.sh --device="enp0s3" --command=set --ipv4=192.168.0.1/24 --dhcp=auto --gateway=192.168.0.1 --dns1=8.8.8.8 --dns2=9.9.9.9
+# np_server_settings.sh --device="enp2s0" --command=set --ipv4=192.168.0.1/24 --dhcp=auto --gateway=192.168.0.1 --dns1=8.8.8.8 --dns2=9.9.9.9
 # -------------------------------------------------------------------------------------------------------------------------------------------
 
 ### ERRORS AND STATUSES (examples of output messages)
 #----------------------------------------------------
 # Error: Input key is not found: --some-wrong-key=1
-# Connection 'enp0s3' successfully deactivated (D-Bus active path org/freedesktop/NetworkManager/ActiveConnection/1)
+# Connection 'enp2s0' successfully deactivated (D-Bus active path org/freedesktop/NetworkManager/ActiveConnection/1)
 # Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/4)
-# Connection 'enp0s3' deactivation failed : Not authorized to deactivate connections.
+# Connection 'enp2s0' deactivation failed : Not authorized to deactivate connections.
 
 device=""
 command="get"
@@ -92,15 +92,20 @@ if [ $command == "get" ] ; then
 
 elif [ $command == "set" ] ; then
 
-	if [ $dhcp == "auto" ] ; then 
-		nmcli conn modify "$device" ipv4.method $dhcp
-		nmcli conn modify "$device" ipv4.address ""
-		nmcli conn modify "$device" ipv4.gateway ""
-	elif [ $dhcp == "manual" ] ; then
-		nmcli conn modify "$device" ipv4.method $dhcp
-		nmcli conn modify "$device" ipv4.address $ipv4
-		nmcli conn modify "$device" ipv4.gateway $gateway
-	fi
+        if [ $dhcp == "auto" ] ; then 
+                nmcli conn modify "$device" ipv4.method $dhcp
+                nmcli conn modify "$device" ipv4.address ""
+                nmcli conn modify "$device" ipv4.gateway ""
+        elif [ $dhcp == "manual" ] ; then
+                echo $dhcp
+                echo $ipv4
+                echo $gateway
+                nmcli conn modify "$device" ipv4.method $dhcp ipv4.addresses $ipv4 ipv4.gateway $gateway
+#               nmcli conn modify "$device" ipv4.method $dhcp
+#               nmcli conn modify "$device" ipv4.address $ipv4
+#               nmcli conn modify "$device" ipv4.gateway $gateway
+        fi
+
 	
 	nmcli conn modify "$device" ipv4.dns "$dns1"
 

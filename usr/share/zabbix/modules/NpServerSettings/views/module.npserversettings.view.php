@@ -31,7 +31,7 @@ $resCodeOnSet = 0;
 
 if (sizeof($_POST) == 0) {
 	$comm = $scriptFolder . '/np_server_settings.sh --device="' . $connectionName . '" --command=get';
-	exec($comm, $nmcli_out, $resCodeOnGet);
+	exec('sudo ' . $comm, $nmcli_out, $resCodeOnGet);
 
 	foreach($nmcli_out as $n) {
 		if(strpos($n, "ipv4.") !== false) {
@@ -78,13 +78,13 @@ if (sizeof($_POST) == 0) {
 		$comm = $comm . ' --dns2=' . $_POST['dns2'];		
 	}
 
-	exec($comm, $nmcli_out, $resCodeOnSet);
+	exec('sudo ' . $comm, $nmcli_out, $resCodeOnSet);
 
 
 	// Let read the settings again after new settings were applied
 
 	$comm = $scriptFolder . '/np_server_settings.sh --device="' . $connectionName . '" --command=get';
-	exec($comm, $nmcli_out, $resCodeOnGet);
+	exec('sudo ' . $comm, $nmcli_out, $resCodeOnGet);
 
 	foreach($nmcli_out as $n) {
 		if(strpos($n, "ipv4.") !== false) {
@@ -208,7 +208,7 @@ if (sizeof($_POST) == 0) {
 				</li>
 				<li>
 					<div class="table-forms-td-left">
-						<label for="Адрес гейта">Адрес гейта </label>
+						<label for="Адрес шлюза">Адрес шлюза </label>
 					</div>
 					<div class="table-forms-td-right">
 						<input type="text" id="gateway" name="gateway" value="<?php echo $gateway; ?>" maxlength="255" style="width: 270px;">
@@ -218,7 +218,7 @@ if (sizeof($_POST) == 0) {
 				</li>
 				<li>
 					<div class="table-forms-td-left">
-						<label for="Адрес основного DNS сервера">Адрес основного DNS сервера </label>
+						<label for="Основной DNS сервер">Основной DNS сервер </label>
 					</div>
 					<div class="table-forms-td-right">
 						<input type="text" id="dns1" name="dns1" value="<?php echo $dns1; ?>" maxlength="255" style="width: 270px;">
@@ -228,7 +228,7 @@ if (sizeof($_POST) == 0) {
 				</li>
 				<li>
 					<div class="table-forms-td-left">
-						<label for="Адрес дополнительного DNS сервера">Адрес дополнительного DNS сервера </label>
+						<label for="Дополнительный DNS сервер">Дополнительный DNS сервер </label>
 					</div>
 					<div class="table-forms-td-right">
 						<input type="text" id="dns2" name="dns2" value="<?php echo $dns2; ?>" maxlength="255" style="width: 270px;">

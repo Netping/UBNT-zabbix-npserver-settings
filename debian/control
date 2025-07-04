@@ -1,8 +1,8 @@
 Source: ubnt-zabbix-npserver-settings
 Section: misc
 Priority: optional
-Maintainer: _valerius@mail.ru
-Version: 2.1-1
+Maintainer: _soft@netping.tw
+Version: 2.2-1
 
 Package: ubnt-zabbix-npserver-settings
 Architecture: all
