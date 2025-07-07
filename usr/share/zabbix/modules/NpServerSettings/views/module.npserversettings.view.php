@@ -9,7 +9,6 @@ $this->includeJsFile('validator/ip_single.js.php');
 $this->includeJsFile('helper.js.php');
 $this->includeJsFile('styles.js.php');
 
-
 exec("/etc/dksl-90-vars lan", $nmcli_out, $resCodeOnGet);
 $connectionName = $nmcli_out[0];
 //$connectionName = "enp0s3"; // you must change this value according to your server setting
@@ -60,28 +59,29 @@ if (sizeof($_POST) == 0) {
 		$dns2 = (isset($dns_arr[1])) ? $dns_arr[1] : "";
 	}
 } elseif (sizeof($_POST) > 0) {
+
 	$comm = $scriptFolder . '/np_server_settings.sh --device="' . $connectionName . '" --command=set';
 
 	if(isset($_POST['dhcp_mode'])) {
 		$comm = $comm . ' --dhcp=' . $_POST['dhcp_mode'];
 	}
-	if(isset($_POST['ipv4']) || $_POST['ipv4'] == "") {
+	if(isset($_POST['ipv4'])) {
 		$comm = $comm .' --ipv4=' . $_POST['ipv4'];
 	}
-	if(isset($_POST['gateway']) ||  $_POST['gateway'] == "") {
+	if(isset($_POST['gateway'])) {
 		$comm = $comm . ' --gateway=' . $_POST['gateway'];
 	}
-	if(isset($_POST['dns1']) || $_POST['dns1'] == "") {
+	if(isset($_POST['dns1'])) {
 		$comm = $comm . ' --dns1=' . $_POST['dns1'];
 	}
-	if(isset($_POST['dns2']) || $_POST['dns2'] == "") {
+	if(isset($_POST['dns2'])) {
 		$comm = $comm . ' --dns2=' . $_POST['dns2'];		
 	}
 
 	exec('sudo ' . $comm, $nmcli_out, $resCodeOnSet);
 
-
 	// Let read the settings again after new settings were applied
+	$nmcli_out = [];
 
 	$comm = $scriptFolder . '/np_server_settings.sh --device="' . $connectionName . '" --command=get';
 	exec('sudo ' . $comm, $nmcli_out, $resCodeOnGet);
@@ -113,6 +113,7 @@ if (sizeof($_POST) == 0) {
 		$dns1 = (isset($dns_arr[0]) && $dns_arr[0] != "--") ? $dns_arr[0] : "";
 		$dns2 = (isset($dns_arr[1])) ? $dns_arr[1] : "";
 	}
+
 }
 
 ?>

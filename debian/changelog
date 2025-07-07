@@ -1,4 +1,4 @@
-ubnt-zabbix-npserver-settings (2.2-1) unstable; urgency=medium
+ubnt-zabbix-npserver-settings (2.2-2) unstable; urgency=medium
 
   * Fixed a bug that caused the module to not work.
 
