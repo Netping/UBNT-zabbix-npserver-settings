@@ -2,7 +2,7 @@ Source: ubnt-zabbix-npserver-settings
 Section: misc
 Priority: optional
 Maintainer: _soft@netping.tw
-Version: 2.2-2
+Version: 2.2-3
 
 Package: ubnt-zabbix-npserver-settings
 Architecture: all

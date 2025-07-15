@@ -27,92 +27,54 @@ $messages = [];
 $resCodeOnGet = 0;
 $resCodeOnSet = 0;
 
+$netplanFile = '/etc/netplan/00-installer-config.yaml';
 
-if (sizeof($_POST) == 0) {
-	$comm = $scriptFolder . '/np_server_settings.sh --device="' . $connectionName . '" --command=get';
-	exec('sudo ' . $comm, $nmcli_out, $resCodeOnGet);
+if (file_exists($netplanFile)) {
+         $yamlContent = file_get_contents($netplanFile);
+         $config = yaml_parse($yamlContent);
+} else {
+        $errorMsgs[] = "Файл конфигурации Netplan не найден: $netplanFile";
+}
 
-	foreach($nmcli_out as $n) {
-		if(strpos($n, "ipv4.") !== false) {
-			list($p, $v) = preg_split("/\s+/", $n);
-			$net[substr($p, 0, -1)] = $v;
-		} elseif (strpos($n, "Error:") !== false) {
-			$errorMsgs[] = $n;
-		} else {
-			$messages[] = $n;
-		}
-	}
+if (empty($_POST)) {
+        if (isset($config['network']['ethernets'][$connectionName])) {
+                $settings = $config['network']['ethernets'][$connectionName];
 
-	if(array_key_exists('ipv4.method', $net)) {
-		$dhcp_mode = $net['ipv4.method'];
-	}
-	if(array_key_exists('ipv4.addresses', $net)) {
-		$ipv4 = ($net['ipv4.addresses'] != "--") ? $net['ipv4.addresses'] : "";
-	}
-	if(array_key_exists('ipv4.gateway', $net)) {
-		$gateway = ($net['ipv4.gateway'] != "--") ? $net['ipv4.gateway'] : "";
-	}
+                $dhcp_mode = isset($settings['dhcp4']) && $settings['dhcp4'] ? "auto" : "manual";
 
-	if(array_key_exists('ipv4.dns', $net)) {
-		$dns_arr = preg_split("/\,/", $net['ipv4.dns']);
-		$dns1 = (isset($dns_arr[0]) && $dns_arr[0] != "--") ? $dns_arr[0] : "";
-		$dns2 = (isset($dns_arr[1])) ? $dns_arr[1] : "";
-	}
-} elseif (sizeof($_POST) > 0) {
+                $ipv4 = $settings['addresses'][0] ?? "";
+                $gateway = $settings['gateway4'] ?? "";
 
-	$comm = $scriptFolder . '/np_server_settings.sh --device="' . $connectionName . '" --command=set';
+                if (isset($settings['nameservers']['addresses'])) {
+                        $dns1 = $settings['nameservers']['addresses'][0] ?? "";
+                        $dns2 = $settings['nameservers']['addresses'][1] ?? "";
+                }
+        } else {
+                $errorMsgs[] = "Интерфейс $connectionName не найден в конфиге Netplan!";
+        }
+}
+else {
 
-	if(isset($_POST['dhcp_mode'])) {
-		$comm = $comm . ' --dhcp=' . $_POST['dhcp_mode'];
-	}
-	if(isset($_POST['ipv4'])) {
-		$comm = $comm .' --ipv4=' . $_POST['ipv4'];
-	}
-	if(isset($_POST['gateway'])) {
-		$comm = $comm . ' --gateway=' . $_POST['gateway'];
-	}
-	if(isset($_POST['dns1'])) {
-		$comm = $comm . ' --dns1=' . $_POST['dns1'];
-	}
-	if(isset($_POST['dns2'])) {
-		$comm = $comm . ' --dns2=' . $_POST['dns2'];		
-	}
+    if ($_POST['dhcp_mode'] === "auto") {
+        $config['network']['ethernets'][$connectionName]['dhcp4'] = true;
+        $config['network']['ethernets'][$connectionName]['addresses'] = "";
+        $config['network']['ethernets'][$connectionName]['gateway4'] = "";
+    } else {
+        $config['network']['ethernets'][$connectionName]['dhcp4'] = false;
+        $config['network']['ethernets'][$connectionName]['addresses'] = [$_POST['ipv4']];
+        $config['network']['ethernets'][$connectionName]['gateway4'] = $_POST['gateway'];
 
-	exec('sudo ' . $comm, $nmcli_out, $resCodeOnSet);
+        if (!empty($_POST['dns1']) || !empty($_POST['dns2'])) {
+            $dnsServers = array_filter([$_POST['dns1'], $_POST['dns2']]);
+            $config['network']['ethernets'][$connectionName]['nameservers']['addresses'] = $dnsServers;
+        }
+    }
 
-	// Let read the settings again after new settings were applied
-	$nmcli_out = [];
+    $yamlContent = yaml_emit($config);
+    file_put_contents($netplanFile, $yamlContent);
 
-	$comm = $scriptFolder . '/np_server_settings.sh --device="' . $connectionName . '" --command=get';
-	exec('sudo ' . $comm, $nmcli_out, $resCodeOnGet);
-
-	foreach($nmcli_out as $n) {
-		if(strpos($n, "ipv4.") !== false) {
-			list($p, $v) = preg_split("/\s+/", $n);
-			$net[substr($p, 0, -1)] = $v;
-		} elseif (strpos($n, "Error:") !== false) {
-			$errorMsgs[] = $n;
-		} else {
-			$messages[] = $n;
-		}
-	}
-
-	if(array_key_exists('ipv4.method', $net)) {
-		$dhcp_mode = $net['ipv4.method'];
-	}
-	if(array_key_exists('ipv4.addresses', $net)) {
-		$ipv4 = ($net['ipv4.addresses'] != "--") ? $net['ipv4.addresses'] : "";
-	}
-	if(array_key_exists('ipv4.gateway', $net)) {
-		$gateway = ($net['ipv4.gateway'] != "--") ? $net['ipv4.gateway'] : "";
-	}
-
-	if(array_key_exists('ipv4.dns', $net)) {
-
-		$dns_arr = preg_split("/\,/", $net['ipv4.dns']);
-		$dns1 = (isset($dns_arr[0]) && $dns_arr[0] != "--") ? $dns_arr[0] : "";
-		$dns2 = (isset($dns_arr[1])) ? $dns_arr[1] : "";
-	}
+    exec("sudo netplan apply", $output, $resCodeOnSet);
+    $messages = array_merge($messages, $output);
 
 }
 

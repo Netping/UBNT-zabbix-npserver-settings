@@ -2,12 +2,22 @@
 
 awk -F":" '{if ($1=="www-data") system("chown -R " $3":"$4 " /usr/share/zabbix/modules/NpServerSettings") }' /etc/passwd
 
-if ! grep -qF 'www-data ALL=(ALL) NOPASSWD: /usr/share/zabbix/modules/NpServerSettings/bash/np_server_settings.sh' /etc/sudoers.d/visor; then
-    echo 'www-data ALL=(ALL) NOPASSWD: /usr/share/zabbix/modules/NpServerSettings/bash/np_server_settings.sh' >> /etc/sudoers.d/visor
+if ! grep -qF 'www-data ALL=(ALL) NOPASSWD: /usr/sbin/netplan apply' /etc/sudoers.d/visor; then
+    echo 'www-data ALL=(ALL) NOPASSWD: /usr/sbin/netplan apply' >> /etc/sudoers.d/visor
 fi
 
-chown root:root /usr/share/zabbix/modules/NpServerSettings/bash/np_server_settings.sh
-chmod ugo+x /usr/share/zabbix/modules/NpServerSettings/bash/np_server_settings.sh
-chmod u+s /usr/share/zabbix/modules/NpServerSettings/bash/np_server_settings.sh
+
+# Создание группы если не существует
+getent group "netplan-admin" >/dev/null || groupadd "netplan-admin"
+
+# Добавление пользователя в группу если не состоит
+groups "www-data" | grep -q "\bnetplan-admin\b" || usermod -aG "netplan-admin" "www-data"
+
+# Установка прав на папку
+[ "$(stat -c "%G" "/etc/netplan")" = "netplan-admin" ] && \
+[ "$(stat -c "%a" "/etc/netplan")" = "775" ] || {
+  chown -R root:"netplan-admin" "/etc/netplan" && \
+  chmod -R "775" "/etc/netplan"
+}
 
 exit 0
