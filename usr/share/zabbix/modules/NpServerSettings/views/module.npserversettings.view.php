@@ -57,8 +57,10 @@ else {
 
     if ($_POST['dhcp_mode'] === "auto") {
         $config['network']['ethernets'][$connectionName]['dhcp4'] = true;
-        $config['network']['ethernets'][$connectionName]['addresses'] = "";
-        $config['network']['ethernets'][$connectionName]['gateway4'] = "";
+    	unset($config['network']['ethernets'][$connectionName]['addresses']);
+    	unset($config['network']['ethernets'][$connectionName]['gateway4']);
+    	// Также удаляем nameservers, если они есть
+    	unset($config['network']['ethernets'][$connectionName]['nameservers']);
     } else {
         $config['network']['ethernets'][$connectionName]['dhcp4'] = false;
         $config['network']['ethernets'][$connectionName]['addresses'] = [$_POST['ipv4']];

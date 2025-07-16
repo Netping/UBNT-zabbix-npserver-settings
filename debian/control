@@ -2,11 +2,11 @@ Source: ubnt-zabbix-npserver-settings
 Section: misc
 Priority: optional
 Maintainer: _soft@netping.tw
-Version: 2.2-3
+Version: 2.2-4
 
 Package: ubnt-zabbix-npserver-settings
 Architecture: all
-Depends: network-manager
+Depends: php-yaml
 Build-Depends: debhelper-compat
 Description: NetPing
  UBNT-zabbix-npserver-settings.
