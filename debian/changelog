@@ -1,5 +1,6 @@
-ubnt-zabbix-npserver-settings (2.2-3) unstable; urgency=medium
+ubnt-zabbix-npserver-settings (2.2-5) unstable; urgency=medium
 
   * Fixed a bug that caused the module to not work.
+  * Fixed IP validation
 
- -- Netping DKSL team <_soft@netping.tw>  Fri, 04 Jul 2025 13:08:00 -0300
+ -- Netping DKSL team <_soft@netping.tw>  Fri, 09 Sep 2025 13:08:00 -0300

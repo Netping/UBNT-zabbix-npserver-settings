@@ -11,7 +11,8 @@ var grammar = {
     {"name": "From_0_to_255", "symbols": [/[0-9]/]},
     {"name": "From_0_to_255", "symbols": [/[1-9]/, /[0-9]/]},
     {"name": "From_0_to_255", "symbols": [{"literal":"1"}, /[0-9]/, /[0-9]/]},
-    {"name": "From_0_to_255", "symbols": [{"literal":"2"}, /[0-5]/, /[0-5]/]}
+    {"name": "From_0_to_255", "symbols": [{"literal":"2"}, /[0-4]/, /[0-9]/]},
+    {"name": "From_0_to_255", "symbols": [{"literal":"2"}, /[5]/, /[0-5]/]}    
 ]
   , ParserStart: "MAIN"
 }
